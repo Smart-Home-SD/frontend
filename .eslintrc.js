@@ -2,10 +2,12 @@ module.exports = {
   env: {
     browser: true,
     es6: true,
+    "jest/globals": true
   },
   extends: [
     'plugin:react/recommended',
     'airbnb',
+    'plugin:jest/recommended'
   ],
   globals: {
     Atomics: 'readonly',
@@ -20,7 +22,16 @@ module.exports = {
   },
   plugins: [
     'react',
+    'jest'
   ],
   rules: {
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "no-console":0,
+       "react/jsx-props-no-spreading": 0,
+     "jest/no-disabled-tests": "warn",
+    "jest/no-focused-tests": "error",
+    "jest/no-identical-title": "error",
+    "jest/prefer-to-have-length": "warn",
+    "jest/valid-expect": "error"
   },
 };
