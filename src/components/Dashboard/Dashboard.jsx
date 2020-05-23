@@ -2,6 +2,7 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 // import { makeStyles } from '@material-ui/core/styles';
 import SensorCard from './SensorCard/sensorCard';
+import MotionCard from './SensorCard/motionCard';
 import { webSocketPath } from '../../helpers/path/urlPaths';
 
 // const useStyles = makeStyles({
@@ -20,16 +21,17 @@ class Dashboard extends React.Component {
       sensors: new Map([
         ['0x00124b00191684a1',
           {
-            name: 'Sensor 1',
-            temp: '23.5',
+            name: 'Temperatura',
+            temp: null,
             humidity: '66.5',
+            type: 0,
           },
         ],
-        ['0x00124b001916a879',
+        ['0x00124b0018c857e8',
           {
-            name: 'Sensor 2',
-            temp: '23.5',
-            humidity: '66.5',
+            name: 'Presença',
+            onOff: null,
+            type: 1,
           },
         ],
       ]),
@@ -70,6 +72,9 @@ class Dashboard extends React.Component {
       if (deviceData.humidity !== undefined && deviceData.humidity != null) {
         sensorData.humidity = deviceData.humidity;
       }
+      if (deviceData.onOff !== undefined && deviceData.onOff != null) {
+        sensorData.onOff = deviceData.onOff;
+      }
       sensors.set(deviceData.deviceId, sensorData);
     }
 
@@ -82,11 +87,15 @@ class Dashboard extends React.Component {
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Grid container justify="left" spacing={2}>
-            {[...sensors.values()].map((value) => (
+            {[...sensors.values()].map((value) => ((value.type === 0) ? (
               <Grid key={value[1]} item>
                 <SensorCard sensor={value} />
               </Grid>
-            ))}
+            ) : (
+              <Grid key={value[1]} item>
+                <MotionCard sensor={value} />
+              </Grid>
+            )))}
           </Grid>
         </Grid>
       </Grid>
