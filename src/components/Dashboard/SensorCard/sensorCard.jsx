@@ -10,6 +10,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { FaTemperatureLow } from 'react-icons/fa';
+import SensorModal from '../DeviceSettings/sensorModal';
 
 const useStyles = makeStyles({
   root: {
@@ -58,7 +59,9 @@ const useStyles = makeStyles({
 });
 
 function SensorCard(props) {
-  const { sensor } = props;
+  const {
+    sensor, handleOpen, handleClose, open,
+  } = props;
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
 
@@ -67,7 +70,15 @@ function SensorCard(props) {
       <CardHeader
         classes={{ title: classes.title }}
         action={(
-          <IconButton aria-label="settings">
+          <IconButton
+            aria-label="settings"
+            onClick={handleOpen}
+          >
+            <SensorModal
+              handleClose={() => handleClose()}
+              open={open}
+              sensor={sensor}
+            />
             <MoreVertIcon />
           </IconButton>
         )}
@@ -99,6 +110,9 @@ SensorCard.propTypes = {
     temp: PropTypes.number.isRequired,
     humidity: PropTypes.number.isRequired,
   }.isRequired,
+  handleOpen: PropTypes.func.isRequired,
+  handleClose: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
 };
 
 export default SensorCard;

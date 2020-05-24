@@ -21,6 +21,7 @@ class Dashboard extends React.Component {
       sensors: new Map([
         ['0x00124b00191684a1',
           {
+            deviceId: '0x00124b00191684a1',
             name: 'Temperatura',
             temp: null,
             humidity: '66.5',
@@ -29,12 +30,14 @@ class Dashboard extends React.Component {
         ],
         ['0x00124b0018c857e8',
           {
+            deviceId: '0x00124b0018c857e8',
             name: 'Presença',
             onOff: null,
             type: 1,
           },
         ],
       ]),
+      open: false,
     };
   }
 
@@ -81,15 +84,30 @@ class Dashboard extends React.Component {
     this.setState({ sensors });
   }
 
+  handleOpen() {
+    this.setState({ open: true });
+    console.log(this.state.open);
+  }
+
+  handleClose() {
+    this.setState({ open: false });
+    console.log(this.state.open);
+  }
+
   render() {
-    const { sensors } = this.state;
+    const { sensors, open } = this.state;
     return (
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Grid container justify="left" spacing={2}>
             {[...sensors.values()].map((value) => ((value.type === 0) ? (
               <Grid key={value[1]} item>
-                <SensorCard sensor={value} />
+                <SensorCard
+                  sensor={value}
+                  handleOpen={() => this.handleOpen()}
+                  handleClose={() => this.handleClose()}
+                  open={open}
+                />
               </Grid>
             ) : (
               <Grid key={value[1]} item>
