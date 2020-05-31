@@ -90,13 +90,13 @@ export default function SensorModal(props) {
 
   const handleRemove = () => {
     console.log('remove');
-    console.log(sensor.deviceId);
+    alert(sensor.deviceId);
     return handleClose();
   };
 
-  const handleSave = () => {
+  const handleSave = (values) => {
     console.log('save');
-    console.log(JSON.stringify(sensor));
+    alert(JSON.stringify(values, null, 2));
     return handleClose();
   };
 
@@ -126,7 +126,7 @@ export default function SensorModal(props) {
             <div>
               <TextField
                 disabled
-                id="outlined-disabled"
+                id="deviceId"
                 label="Número de Série"
                 value={formik.values.deviceId}
                 variant="outlined"
@@ -134,7 +134,7 @@ export default function SensorModal(props) {
                 onChange={formik.handleChange}
               />
               <TextField
-                id="outlined-required"
+                id="name"
                 label="Name"
                 value={formik.values.name}
                 variant="outlined"
@@ -159,11 +159,11 @@ export default function SensorModal(props) {
                 Remover
               </Button>
               <Button
-                type="submit"
+                // type="submit"
                 variant="contained"
                 color="primary"
                 className={classes.button}
-                // onClick={handleSave}
+                onClick={() => handleSave(formik.values)}
               >
                 Salvar
               </Button>

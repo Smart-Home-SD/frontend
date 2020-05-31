@@ -23,6 +23,7 @@ import {
 } from 'react-router-dom';
 import { MenuItem } from '@material-ui/core';
 import UserManager from '../components/UserManager/UserManager';
+import Dashboard from '../components/Dashboard/Dashboard';
 
 const drawerWidth = 240;
 
@@ -71,7 +72,7 @@ function HomePage() {
   const open = Boolean(anchorEl);
 
   const sideMenuLabels = [
-    { label: 'Dashboard', icon: <DashboardIcon />, link: '/home' },
+    { label: 'Dashboard', icon: <DashboardIcon />, link: '/' },
     { label: 'Sensores', icon: <SpeedIcon />, link: '/sensors' },
     { label: 'Usuários', icon: <GroupIcon />, link: '/users' },
   ];
@@ -183,14 +184,14 @@ function HomePage() {
       <main className={classes.content}>
         <div className={classes.toolbar} />
         <Switch>
-          <Route path="/home">
-            <h1>home</h1>
-          </Route>
           <Route path="/sensors">
             <h2>asd</h2>
           </Route>
           <Route path="/users">
             <UserManager />
+          </Route>
+          <Route path="/">
+            <Dashboard />
           </Route>
         </Switch>
       </main>
