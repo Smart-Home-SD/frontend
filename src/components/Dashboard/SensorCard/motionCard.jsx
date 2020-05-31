@@ -74,14 +74,6 @@ function MotionCard(props) {
         title={sensor.name}
       />
       <CardContent className={classes.content}>
-        {/* <Typography variant="h5" component="h2">
-          {sensor.name}
-        </Typography> */}
-        {/* <CardActions>
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
-        </CardActions> */}
         <FaRunning className={classes.sensorIcon} />
         <Typography variant="body1">
           {(sensor.onOff) ? 'Presente' : 'Ausente'}

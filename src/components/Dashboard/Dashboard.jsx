@@ -2,7 +2,6 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 // import { makeStyles } from '@material-ui/core/styles';
 import SensorCard from './SensorCard/sensorCard';
-import MotionCard from './SensorCard/motionCard';
 import { webSocketPath } from '../../helpers/path/urlPaths';
 
 // const useStyles = makeStyles({
@@ -23,8 +22,7 @@ class Dashboard extends React.Component {
           {
             deviceId: '0x00124b00191684a1',
             name: 'Temperatura',
-            temp: null,
-            humidity: '66.5',
+            value: null,
             type: 0,
           },
         ],
@@ -32,12 +30,11 @@ class Dashboard extends React.Component {
           {
             deviceId: '0x00124b0018c857e8',
             name: 'Presença',
-            onOff: null,
+            value: null,
             type: 1,
           },
         ],
       ]),
-      open: false,
     };
   }
 
@@ -70,7 +67,7 @@ class Dashboard extends React.Component {
     const sensorData = deviceData.deviceId && sensors.get(deviceData.deviceId);
     if (sensorData) {
       if (deviceData.temperature !== undefined && deviceData.temperature != null) {
-        sensorData.temp = deviceData.temperature;
+        sensorData.value = deviceData.temperature;
       }
       if (deviceData.humidity !== undefined && deviceData.humidity != null) {
         sensorData.humidity = deviceData.humidity;
@@ -84,36 +81,19 @@ class Dashboard extends React.Component {
     this.setState({ sensors });
   }
 
-  handleOpen() {
-    this.setState({ open: true });
-    console.log(this.state.open);
-  }
-
-  handleClose() {
-    this.setState({ open: false });
-    console.log(this.state.open);
-  }
-
   render() {
-    const { sensors, open } = this.state;
+    const { sensors } = this.state;
     return (
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Grid container justify="left" spacing={2}>
-            {[...sensors.values()].map((value) => ((value.type === 0) ? (
+            {[...sensors.values()].map((value) => (
               <Grid key={value[1]} item>
                 <SensorCard
                   sensor={value}
-                  handleOpen={() => this.handleOpen()}
-                  handleClose={() => this.handleClose()}
-                  open={open}
                 />
               </Grid>
-            ) : (
-              <Grid key={value[1]} item>
-                <MotionCard sensor={value} />
-              </Grid>
-            )))}
+            ))}
           </Grid>
         </Grid>
       </Grid>
