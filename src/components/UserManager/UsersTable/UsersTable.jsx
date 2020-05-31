@@ -1,57 +1,99 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
+import MaterialTable, { MTableToolbar } from 'material-table';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
+import { Switch, Typography } from '@material-ui/core';
+import MaterialTableIcons from './MaterialTableIcons';
 
 const useStyles = makeStyles({
   table: {
-    minWidth: 100,
+    minWidth: 70,
+  },
+  tableControlers: {
+    padding: '0px 10px',
+    display: 'flex',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
   },
 });
 
-function createData(name, role) {
-  return {
-    name, role,
-  };
-}
 
-const rows = [
-  createData('Breno Salgado', 'Admin'),
-  createData('Fred', 'Admin'),
-  createData('Leo', 'Admin'),
-  createData('Felipe', 'Admin'),
-  createData('Marcel', 'Admin'),
-
+const data = [
+  { name: 'Leo', accessLevel: 'Admin' },
+  { name: 'Felipe', accessLevel: 'Admin' },
+  { name: 'Marcel', accessLevel: 'Admin' },
+  { name: 'Fred', accessLevel: 'Admin' },
+  { name: 'Breno', accessLevel: 'Admin' },
 ];
 
 export default function UsersTable() {
   const classes = useStyles();
-
+  const [filterOn, setfilterOn] = useState(false);
   return (
-    <TableContainer component={Paper}>
-      <Table className={classes.table} aria-label="users table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Username</TableCell>
-            <TableCell align="right">Role</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.name}>
-              <TableCell component="th" scope="row">
-                {row.name}
-              </TableCell>
-              <TableCell align="right">{row.role}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <div>
+      <MaterialTable
+        icons={MaterialTableIcons}
+        title="Gerenciador de Usuários"
+        columns={[
+          { title: 'Username', field: 'name' },
+          { title: 'Permissão', field: 'accessLevel' },
+        ]}
+        options={{
+          filtering: filterOn,
+          actionsColumnIndex: -1,
+        }}
+        data={data}
+        localization={{
+          pagination: {
+            labelDisplayedRows: '{from}-{to} de {count}',
+            labelRowsSelect: 'linhas',
+          },
+          toolbar: {
+            nRowsSelected: '{0} Linha(s) selecionada(s)',
+          },
+          header: {
+            actions: 'Ações',
+          },
+          body: {
+            emptyDataSourceMessage: 'Sem dados',
+            filterRow: {
+              filterTooltip: 'Filtro',
+            },
+          },
+        }}
+        components={{
+          Toolbar: (props) => (
+            <div>
+              <MTableToolbar {...props} />
+              <div className={classes.tableControlers}>
+                <Typography>
+                  Mostrar Filtros
+                </Typography>
+                <Switch
+                  checked={filterOn}
+                  onChange={(e) => setfilterOn(e.target.checked)}
+                  color="primary"
+                  name="Show Filters"
+                  inputProps={{ 'aria-label': 'primary checkbox' }}
+                />
+              </div>
+            </div>
+          ),
+        }}
+        actions={[
+          {
+            icon: EditIcon,
+            tooltip: 'Editar Usuário',
+            onClick: (event, rowData) => window.alert(`You saved ${rowData.name}`),
+          },
+          {
+            icon: DeleteIcon,
+            tooltip: 'Deletar Usuário',
+            onClick: (event, rowData) => window.confirm(`You want to delete ${rowData.name}`),
+          },
+        ]}
+      />
+    </div>
   );
 }

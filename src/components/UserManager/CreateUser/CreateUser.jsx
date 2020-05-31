@@ -7,11 +7,10 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
 import {
-  Tooltip, Fab, makeStyles, TextField, Grid, Select, InputLabel, Typography,
+  Tooltip, Fab, makeStyles, TextField, Grid, Select,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { useFormik } from 'formik';
-import CreateUserForm from './CreateUserForm/CreateUserForm';
 
 const useStyles = makeStyles((theme) => ({
 
