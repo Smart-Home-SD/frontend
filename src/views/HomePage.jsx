@@ -83,6 +83,10 @@ function HomePage() {
     setMobileOpen(!mobileOpen);
   };
 
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -90,16 +94,16 @@ function HomePage() {
 
   const drawer = (
     <div>
-      <div className={classes.toolbar} />
-      <Divider />
+      {/* <div className={classes.toolbar} /> */}
+      {/* <Divider /> */}
       <List>
         {sideMenuLabels.map((item) => (
-          <ListItem button key={item.label}>
-            <ListItemIcon>{item.icon}</ListItemIcon>
-            <Link to={item.link} style={{ color: 'inherit', textDecoration: 'none' }}>
+          <Link to={item.link} style={{ color: 'inherit', textDecoration: 'none' }}>
+            <ListItem button key={item.label}>
+              <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText primary={item.label} />
-            </Link>
-          </ListItem>
+            </ListItem>
+          </Link>
         ))}
       </List>
     </div>
@@ -126,7 +130,7 @@ function HomePage() {
             aria-label="account of current user"
             aria-controls="menu-appbar"
             aria-haspopup="true"
-            // onClick={handleMenu}
+            onClick={handleMenu}
             color="inherit"
           >
             <AccountCircle />
@@ -135,8 +139,8 @@ function HomePage() {
             id="menu-appbar"
             anchorEl={anchorEl}
             anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
+              vertical: 'bottom',
+              horizontal: 'left',
             }}
             keepMounted
             transformOrigin={{

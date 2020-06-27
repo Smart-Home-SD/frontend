@@ -28,7 +28,7 @@ export default function HeaderComponent(props) {
   const open = Boolean(anchorEl);
 
   const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
+    setAnchorEl(event.currentTarget.value);
   };
 
   const handleClose = () => {
