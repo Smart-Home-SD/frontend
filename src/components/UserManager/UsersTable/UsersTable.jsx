@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import MaterialTable, { MTableToolbar } from 'material-table';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { Switch, Typography } from '@material-ui/core';
-import MaterialTableIcons from './MaterialTableIcons';
+import Axios from 'axios';
+import { url } from '../../../config/variables';
+import EditUser from '../EditUser/EditUser';
+// import MaterialTableIcons from './MaterialTableIcons';
 
 const useStyles = makeStyles({
   table: {
@@ -30,20 +33,35 @@ const data = [
 export default function UsersTable() {
   const classes = useStyles();
   const [filterOn, setfilterOn] = useState(false);
+  const [users, setUsers] = useState([]);
+
+  const fetchUsers = () => {
+    Axios.get(`${url}users/`).then((res) => {
+      console.log(res.data);
+      setUsers(res.data);
+      console.log('asdasd');
+    });
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
   return (
     <div>
+      <EditUser username="breno" userType="ADMIN" />
       <MaterialTable
-        icons={MaterialTableIcons}
+        // icons={MaterialTableIcons}
         title="Gerenciador de Usuários"
         columns={[
-          { title: 'Username', field: 'name' },
-          { title: 'Permissão', field: 'accessLevel' },
+          { title: 'Username', field: 'username' },
+          { title: 'Permissão', field: 'userType' },
         ]}
         options={{
           filtering: filterOn,
           actionsColumnIndex: -1,
         }}
-        data={data}
+        data={users}
         localization={{
           pagination: {
             labelDisplayedRows: '{from}-{to} de {count}',
@@ -85,12 +103,12 @@ export default function UsersTable() {
           {
             icon: EditIcon,
             tooltip: 'Editar Usuário',
-            onClick: (event, rowData) => window.alert(`You saved ${rowData.name}`),
+            onClick: (event, rowData) => console.log('asds'),
           },
           {
             icon: DeleteIcon,
             tooltip: 'Deletar Usuário',
-            onClick: (event, rowData) => window.confirm(`You want to delete ${rowData.name}`),
+            onClick: (event, rowData) => Axios.delete(`${url}users/delete/${rowData._id}`).then((res) => (res.status === 200 && window.location.reload()) || (res.status !== 200 && window.alert('Não foi possivel deletar'))),
           },
         ]}
       />

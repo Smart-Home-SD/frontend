@@ -7,6 +7,7 @@ export default function UserManager() {
   // const theme = useTheme();
   // const mobileMatcher = useMediaQuery(theme.breakpoints.down('sm'));
   // const classes = useStyles();
+
   return (
     <div>
       {/* {!mobileMatcher && <UsersTable />} */}

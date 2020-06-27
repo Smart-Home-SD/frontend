@@ -7,10 +7,12 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
 import {
-  Tooltip, Fab, makeStyles, TextField, Grid, Select,
+  Tooltip, Fab, makeStyles, TextField, Grid, Select, InputLabel,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { useFormik } from 'formik';
+import Axios from 'axios';
+import { url } from '../../../config/variables';
 
 const useStyles = makeStyles((theme) => ({
 
@@ -45,8 +47,8 @@ const validate = (values) => {
     errors.password = 'O usuário deve ter pelo menos 5 caracteres';
   }
 
-  if (!values.accessLevel) {
-    errors.accessLevel = 'Requerido';
+  if (!values.userType) {
+    errors.userType = 'Requerido';
   }
 
   return errors;
@@ -63,11 +65,17 @@ export default function CrateUser() {
     initialValues: {
       username: '',
       password: '',
-      accessLevel: '',
+      userType: '',
     },
     validate,
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      Axios.post(`${url}users/`, values).then((res) => {
+        if (res.status !== 200) {
+          window.alert('Erro ao adicionar');
+        } else {
+          window.location.reload();
+        }
+      });
     },
   });
 
@@ -127,13 +135,15 @@ export default function CrateUser() {
 
                 </Grid>
                 <Grid item xs={12} lg={12} md={12} sm={12}>
+
                   <Select
-                    id="accessLevel"
+                    id="userType"
                     native
-                    error={formik.touched.accessLevel && formik.errors.accessLevel}
+                    error={formik.touched.userType && formik.errors.userType}
                     required
                     className={classes.select}
-                    value={formik.values.accessLevel}
+                    value={formik.values.userType}
+                    labelId="accessLvl"
                     variant="outlined"
                     onChange={formik.handleChange}
                     label="Tipo de Usuário"
