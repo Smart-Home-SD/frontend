@@ -15,14 +15,23 @@ import Toolbar from '@material-ui/core/Toolbar';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import Typography from '@material-ui/core/Typography';
 import SpeedIcon from '@material-ui/icons/Speed';
+import Menu from '@material-ui/core/Menu';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { Link } from 'react-router-dom';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import {
+  Link, Switch, Route,
+} from 'react-router-dom';
+import { MenuItem } from '@material-ui/core';
+import UserManager from '../components/UserManager/UserManager';
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
+  },
+  title: {
+    flexGrow: 1,
   },
   drawer: {
     [theme.breakpoints.up('sm')]: {
@@ -54,10 +63,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function HomePage(props) {
+function HomePage() {
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
 
   const sideMenuLabels = [
     { label: 'Dashboard', icon: <DashboardIcon />, link: '/home' },
@@ -66,21 +77,31 @@ function HomePage(props) {
   ];
 
   const handleDrawerToggle = () => {
+    console.log('sad');
     setMobileOpen(!mobileOpen);
   };
 
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+
   const drawer = (
     <div>
-      <div className={classes.toolbar} />
-      <Divider />
+      {/* <div className={classes.toolbar} /> */}
+      {/* <Divider /> */}
       <List>
         {sideMenuLabels.map((item) => (
-          <ListItem button key={item.label}>
-            <ListItemIcon>{item.icon}</ListItemIcon>
-            <Link to={item.link} style={{ color: 'inherit', textDecoration: 'none' }}>
+          <Link to={item.link} style={{ color: 'inherit', textDecoration: 'none' }}>
+            <ListItem button key={item.label}>
+              <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText primary={item.label} />
-            </Link>
-          </ListItem>
+            </ListItem>
+          </Link>
         ))}
       </List>
     </div>
@@ -100,16 +121,43 @@ function HomePage(props) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap>
+          <Typography variant="h6" className={classes.title} noWrap>
             Smart home
           </Typography>
+          <IconButton
+            aria-label="account of current user"
+            aria-controls="menu-appbar"
+            aria-haspopup="true"
+            onClick={handleMenu}
+            color="inherit"
+          >
+            <AccountCircle />
+          </IconButton>
+          <Menu
+            id="menu-appbar"
+            anchorEl={anchorEl}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'left',
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            open={open}
+            onClose={handleClose}
+          >
+            <MenuItem>Profile</MenuItem>
+            <MenuItem>My account</MenuItem>
+          </Menu>
         </Toolbar>
+
       </AppBar>
-      <nav className={classes.drawer} aria-label="mailbox folders">
+      <nav className={classes.drawer} aria-label="Smart Home">
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Hidden smUp implementation="css">
           <Drawer
-
             variant="temporary"
             anchor={theme.direction === 'rtl' ? 'right' : 'left'}
             open={mobileOpen}
@@ -138,17 +186,17 @@ function HomePage(props) {
       </nav>
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <Typography paragraph>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla
-          facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
-          tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
-          consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus sed
-          vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra accumsan in. In
-          hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem et
-          tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique sollicitudin
-          nibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo viverra maecenas
-          accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci a.
-        </Typography>
+        <Switch>
+          <Route path="/home">
+            <h1>home</h1>
+          </Route>
+          <Route path="/sensors">
+            <h2>asd</h2>
+          </Route>
+          <Route path="/users">
+            <UserManager />
+          </Route>
+        </Switch>
       </main>
     </div>
   );
