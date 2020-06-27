@@ -83,7 +83,7 @@ function MotionContent(props) {
     <CardContent className={classes.content}>
       <FaRunning className={classes.sensorIcon} color="lightsalmon" />
       <Typography variant="body1">
-        {(sensor.value) ? 'Presente' : 'Ausente'}
+        {(sensor.value == null) ? '' : (sensor.value) ? 'Presente' : 'Ausente'}
       </Typography>
     </CardContent>
   );
@@ -94,8 +94,8 @@ function SensorCard(props) {
   const [open, setOpen] = React.useState(false);
   const classes = useStyles();
   const sensorClasses = [
-    (sensor.value != null) ? classes.root : classes.rootOffline,
-    (sensor.type === 0) ? classes.temperature : classes.motion,
+    (sensor.value != null && sensor.value !== 0) ? classes.root : classes.rootOffline,
+    (sensor.type === 'TEMP') ? classes.temperature : classes.motion,
   ];
 
   const handleOpen = () => {
@@ -127,7 +127,7 @@ function SensorCard(props) {
         open={open}
         sensor={sensor}
       />
-      {sensor.type === 0
+      {sensor.type === 'TEMP'
         ? <TemperatureContent sensor={sensor} />
         : <MotionContent sensor={sensor} />}
     </Card>

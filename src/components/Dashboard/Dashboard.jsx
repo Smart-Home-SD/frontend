@@ -1,8 +1,9 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
+import fetch from 'node-fetch';
 // import { makeStyles } from '@material-ui/core/styles';
 import SensorCard from './SensorCard/sensorCard';
-import { webSocketPath } from '../../helpers/path/urlPaths';
+import { apiPath, webSocketPath } from '../../helpers/path/urlPaths';
 
 // const useStyles = makeStyles({
 //   root: {
@@ -17,29 +18,40 @@ class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      sensors: new Map([
-        ['0x00124b00191684a1',
-          {
-            deviceId: '0x00124b00191684a1',
-            name: 'Temperatura',
-            value: null,
-            type: 0,
-          },
-        ],
-        ['0x00124b0018c857e8',
-          {
-            deviceId: '0x00124b0018c857e8',
-            name: 'Presença',
-            value: null,
-            type: 1,
-          },
-        ],
-      ]),
+      sensors: new Map(),
     };
   }
 
   componentDidMount() {
+    this.getSensors();
     this.connectSocket();
+  }
+
+  async getSensors() {
+    const { sensors } = this.state;
+    sensors.clear();
+    try {
+      const response = await fetch(`${apiPath}/sensors/`, { method: 'GET' });
+      const jsonResponse = await response.json();
+      if (Array.isArray(jsonResponse)) {
+        jsonResponse.forEach((sensor) => {
+          const sensorData = {
+            ...sensor,
+            value: null,
+          };
+          if (!sensors.has(sensor.deviceId)) {
+            sensors.set(sensor.deviceId, sensorData);
+          }
+        });
+        this.setState(sensors);
+      } else {
+        console.log(jsonResponse);
+        this.setState(sensors);
+        window.alert('Nenhum sensor encontrado');
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async connectSocket() {
@@ -64,18 +76,15 @@ class Dashboard extends React.Component {
 
   updateSensorData(deviceData) {
     const { sensors } = this.state;
-    const sensorData = deviceData.deviceId && sensors.get(deviceData.deviceId);
+    const sensorData = deviceData.id && sensors.get(deviceData.id);
     if (sensorData) {
       if (deviceData.temperature !== undefined && deviceData.temperature != null) {
-        sensorData.value = deviceData.temperature;
+        sensorData.value = deviceData.temperature.toFixed(2);
       }
-      if (deviceData.humidity !== undefined && deviceData.humidity != null) {
-        sensorData.humidity = deviceData.humidity;
+      if (deviceData.active !== undefined && deviceData.active != null) {
+        sensorData.value = deviceData.active;
       }
-      if (deviceData.onOff !== undefined && deviceData.onOff != null) {
-        sensorData.onOff = deviceData.onOff;
-      }
-      sensors.set(deviceData.deviceId, sensorData);
+      sensors.set(deviceData.id, sensorData);
     }
 
     this.setState({ sensors });

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useFormik } from  'formik';
+import { useFormik } from 'formik';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
@@ -9,6 +9,8 @@ import { FaTemperatureLow, FaRunning } from 'react-icons/fa';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import fetch from 'node-fetch';
+import { apiPath } from '../../../helpers/path/urlPaths';
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -74,29 +76,48 @@ function MotionSensor() {
 export default function SensorModal(props) {
   const classes = useStyles();
   const { open, handleClose } = props;
-  let sensor;
-  sensor = props.sensor;
+  const { sensor } = props;
 
   const formik = useFormik({
     initialValues: {
       deviceId: sensor.deviceId,
       name: sensor.name,
+      owner: sensor.owner,
       type: sensor.type,
-    },
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      id: sensor._id,
     },
   });
 
-  const handleRemove = () => {
-    console.log('remove');
-    alert(sensor.deviceId);
+  const handleRemove = async () => {
+    try {
+      const response = await fetch(`${apiPath}/sensors/delete/${sensor._id}`, { method: 'DELETE' });
+      const jsonResponse = await response.json();
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
     return handleClose();
   };
 
-  const handleSave = (values) => {
-    console.log('save');
-    alert(JSON.stringify(values, null, 2));
+  const handleSave = async (values) => {
+    try {
+      const response = await fetch(`${apiPath}/sensors/update`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
+      });
+      const jsonResponse = await response.json();
+      if (jsonResponse.message === 'sensor updated!') {
+        window.location.reload();
+      } else {
+        window.alert('Não foi possível salvar');
+      }
+    } catch (error) {
+      console.log(error);
+      window.alert('Não foi possível salvar');
+    }
     return handleClose();
   };
 
@@ -119,7 +140,7 @@ export default function SensorModal(props) {
           <Typography className={classes.h4} variant="h4" component="h4">
             Editar Dispositivo
           </Typography>
-          {(sensor.type === 0)
+          {(sensor.type === 'TEMP')
             ? <TemperatureSensor />
             : <MotionSensor />}
           <form noValidate autoComplete="off" onSubmit={formik.onSubmit}>
