@@ -23,6 +23,7 @@ import {
 } from 'react-router-dom';
 import { MenuItem } from '@material-ui/core';
 import UserManager from '../components/UserManager/UserManager';
+import SensorManager from '../components/SensorManager/SensorManager';
 import Dashboard from '../components/Dashboard/Dashboard';
 
 const drawerWidth = 240;
@@ -185,7 +186,7 @@ function HomePage() {
         <div className={classes.toolbar} />
         <Switch>
           <Route path="/sensors">
-            <h2>asd</h2>
+            <SensorManager />
           </Route>
           <Route path="/users">
             <UserManager />

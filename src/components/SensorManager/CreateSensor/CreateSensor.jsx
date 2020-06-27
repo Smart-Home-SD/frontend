@@ -11,6 +11,8 @@ import {
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { useFormik } from 'formik';
+import fetch from 'node-fetch';
+import { apiPath } from '../../../helpers/path/urlPaths';
 // import CreateSensorForm from './CreateSensorForm/CreateSensorForm';
 
 const useStyles = makeStyles((theme) => ({
@@ -42,8 +44,6 @@ const validate = (values) => {
 
   if (!values.deviceId) {
     errors.deviceId = 'Requerido';
-  } else if (values.deviceId.length < 5) {
-    errors.deviceId = 'O usuário deve ter pelo menos 5 caracteres';
   }
 
   if (!values.type) {
@@ -52,6 +52,22 @@ const validate = (values) => {
 
   return errors;
 };
+
+async function handleSubmit(sensor) {
+  try {
+    const response = await fetch(`${apiPath}/sensors`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(sensor),
+    });
+    const jsonResponse = await response.json();
+    return jsonResponse.Status;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 export default function CrateSensor() {
   const [open, setOpen] = React.useState(false);
@@ -64,11 +80,18 @@ export default function CrateSensor() {
     initialValues: {
       name: '',
       deviceId: '',
+      owner: 'fred',
       type: '',
     },
     validate,
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+    onSubmit: async (values) => {
+      const status = await handleSubmit(values);
+      if (status === true) {
+        setOpen(false);
+      } else {
+        console.log(status);
+        alert('Não foi possível inserir. Verifique se este sensor já não foi inserido!');
+      }
     },
   });
 
@@ -139,9 +162,9 @@ export default function CrateSensor() {
                     onChange={formik.handleChange}
                     label="Tipo de Sensor"
                   >
-                    <option value="" label="Selecione"/>
-                    <option value={0}>Temperatura</option>
-                    <option value={1}>Presença</option>
+                    <option value="" label="Selecione" />
+                    <option value="TEMP">Temperatura</option>
+                    <option value="PRES">Presença</option>
                   </Select>
 
                 </Grid>

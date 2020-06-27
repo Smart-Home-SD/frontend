@@ -57,13 +57,14 @@ export default function UpdateSensor(props) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const classes = useStyles();
-  const { sensor, open, handleClose } = props;
-
+  const { sensor, handleClose, open } = props;
   const formik = useFormik({
     initialValues: {
       name: sensor.name,
       deviceId: sensor.deviceId,
+      owner: sensor.owner,
       type: sensor.type,
+      _id: sensor._id,
     },
     validate,
     onSubmit: (values) => {
@@ -149,9 +150,12 @@ export default function UpdateSensor(props) {
 
 UpdateSensor.propTypes = {
   sensor: {
+    deviceId: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
-    deviceId: PropTypes.string.isRequired,
-    type: PropTypes.number.isRequired,
+    owner: PropTypes.string,
+    type: PropTypes.string.isRequired,
+    _id: PropTypes.string,
   }.isRequired,
-  handleClose: PropTypes.func.isRequired
+  handleClose: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
 };
