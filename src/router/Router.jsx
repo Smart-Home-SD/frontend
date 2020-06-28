@@ -17,8 +17,8 @@ const Router = () => (
   <Switch>
     {/* <Route path="/" component={Admin} /> */}
     <Route path="/login" component={loginPage} />
-    {/* <PrivateRoute path="/" component={HomePage} /> */}
-    <Route path="/" component={HomePage} />
+    <PrivateRoute path="*" component={HomePage} />
+    {/* <Route path="/" component={HomePage} /> */}
   </Switch>
 );
 
