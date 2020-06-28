@@ -10,7 +10,6 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { FaTemperatureLow, FaRunning, FaRegTrashAlt } from 'react-icons/fa';
 import fetch from 'node-fetch';
-import UpdateSensor from '../UpdateSensor/UpdateSensor';
 import { apiPath } from '../../../helpers/path/urlPaths';
 
 const useStyles = makeStyles({
@@ -29,9 +28,9 @@ const useStyles = makeStyles({
 // ];
 
 export default function SensorsTable() {
-  const [open, setOpen] = React.useState(false);
+  // const [open, setOpen] = React.useState(false);
   const [rows, setRows] = React.useState([]);
-  const [sensor, setSensor] = React.useState(rows[0]);
+  // const [sensor, setSensor] = React.useState(rows[0]);
   const classes = useStyles();
 
   const fetchSensors = async () => {
@@ -53,15 +52,15 @@ export default function SensorsTable() {
     fetchSensors();
   });
 
-  const handleClickOpen = (row) => {
-    console.log(row);
-    setSensor(row);
-    setOpen(true);
-  };
+  // const handleClickOpen = (row) => {
+  //   console.log(row);
+  //   setSensor(row);
+  //   setOpen(true);
+  // };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+  // const handleClose = () => {
+  //   setOpen(false);
+  // };
 
   const handleRemove = async (sensor) => {
     try {

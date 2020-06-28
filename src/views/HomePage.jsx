@@ -91,7 +91,6 @@ function HomePage() {
     setAnchorEl(null);
   };
 
-
   const drawer = (
     <div>
       {/* <div className={classes.toolbar} /> */}
@@ -124,7 +123,7 @@ function HomePage() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title} noWrap>
-            Smart home
+            Smart Home
           </Typography>
           <IconButton
             aria-label="account of current user"

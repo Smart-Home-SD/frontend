@@ -1,2 +1,2 @@
-export const webSocketPath = 'ws://758839fca203.ngrok.io/';
-export const apiPath = 'http://84ebd6df5889.ngrok.io';
+export const webSocketPath = 'ws://892629162817.ngrok.io/';
+export const apiPath = 'http://7f07360797f8.ngrok.io';

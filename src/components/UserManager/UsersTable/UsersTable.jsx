@@ -6,7 +6,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { Switch, Typography } from '@material-ui/core';
 import Axios from 'axios';
 import { url } from '../../../config/variables';
-import EditUser from '../EditUser/EditUser';
+// import EditUser from '../EditUser/EditUser';
 // import MaterialTableIcons from './MaterialTableIcons';
 
 const useStyles = makeStyles({
@@ -49,7 +49,7 @@ export default function UsersTable() {
 
   return (
     <div>
-      <EditUser username="breno" userType="ADMIN" />
+      {/* <EditUser username="breno" userType="ADMIN" /> */}
       <MaterialTable
         // icons={MaterialTableIcons}
         title="Gerenciador de Usuários"

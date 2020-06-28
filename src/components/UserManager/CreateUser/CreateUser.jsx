@@ -60,14 +60,13 @@ export default function CrateUser() {
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const classes = useStyles();
 
-
   const formik = useFormik({
     initialValues: {
       username: '',
       password: '',
       userType: '',
     },
-    validate,
+    // validate,
     onSubmit: (values) => {
       Axios.post(`${url}users/`, values).then((res) => {
         if (res.status !== 200) {

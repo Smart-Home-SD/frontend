@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -7,13 +8,12 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
 import {
-  Tooltip, Fab, makeStyles, TextField, Grid, Select, InputLabel, Typography,
+  Tooltip, Fab, makeStyles, TextField, Grid, Select,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { useFormik } from 'formik';
 import fetch from 'node-fetch';
 import { apiPath } from '../../../helpers/path/urlPaths';
-// import CreateSensorForm from './CreateSensorForm/CreateSensorForm';
 
 const useStyles = makeStyles((theme) => ({
 
@@ -69,19 +69,19 @@ async function handleSubmit(sensor) {
   }
 }
 
-export default function CrateSensor() {
+export default function CrateSensor(props) {
+  const { users } = props;
   const [open, setOpen] = React.useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const classes = useStyles();
 
-
   const formik = useFormik({
     initialValues: {
       name: '',
       deviceId: '',
-      owner: 'fred',
-      type: '',
+      owner: 'Owner',
+      type: 'Tipo',
     },
     validate,
     onSubmit: async (values) => {
@@ -103,6 +103,7 @@ export default function CrateSensor() {
     formik.handleReset();
     setOpen(false);
   };
+  console.log(users);
   return (
     <div>
       <div className={classes.actionIcon}>
@@ -162,9 +163,28 @@ export default function CrateSensor() {
                     onChange={formik.handleChange}
                     label="Tipo de Sensor"
                   >
-                    <option value="" label="Selecione" />
+                    <option value="" label="Selecione o Tipo" />
                     <option value="TEMP">Temperatura</option>
                     <option value="PRES">Presença</option>
+                  </Select>
+
+                </Grid>
+                <Grid item xs={12} lg={12} md={12} sm={12}>
+                  <Select
+                    id="owner"
+                    native
+                    error={formik.touched.owner && formik.errors.owner}
+                    required
+                    className={classes.select}
+                    value={formik.values.owner}
+                    variant="outlined"
+                    onChange={formik.handleChange}
+                    label="Owner"
+                  >
+                    <option value="" label="Selecione o Usuario" />
+                    {(users && users.length)
+                      ? users.map((user) => <option value={user.username}>{user.username}</option>)
+                      : <option value="">{' '}</option>}
                   </Select>
 
                 </Grid>
@@ -184,3 +204,7 @@ export default function CrateSensor() {
     </div>
   );
 }
+
+CrateSensor.propTypes = {
+  users: PropTypes.arrayOf(PropTypes.object).isRequired,
+};
