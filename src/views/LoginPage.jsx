@@ -8,8 +8,10 @@ import {
   Grid, makeStyles, Card, Typography, CardContent, CardMedia, Button, TextField,
 } from '@material-ui/core';
 import Axios from 'axios';
+import { Redirect, useHistory } from 'react-router-dom';
 import loginBanner from '../assets/img/login.png';
 import { url } from '../config/variables';
+import { useAuth } from '../helpers/auth/auth';
 
 const useStyles = makeStyles((theme) => ({
   loginContainer: {
@@ -35,15 +37,18 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Login() {
+  const history = useHistory();
   const classes = useStyles();
-
+  const { authTokens, setAuthTokens } = useAuth();
   const formik = useFormik({
     initialValues: {
       username: '',
       password: '',
     },
     onSubmit: (values) => {
-      Axios.post(`${url}/users/login`, values);
+      Axios.post(`${url}users/login`, values).then((res) => {
+        if (res.status === 200) { setAuthTokens(res.data.token); history.push('/'); }
+      });
     },
   });
   return (
